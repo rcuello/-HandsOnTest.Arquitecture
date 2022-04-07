@@ -1,0 +1,74 @@
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'                   Symbols => https://github.com/plantuml-stdlib/Azure-PlantUML/blob/master/AzureSymbols.md#azure-symbols
+' Objetos Devicon   => https://github.com/tupadr3/plantuml-icon-font-sprites
+'============================================================
+
+@startuml diagrama-3-componentes-historia02
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+
+!include DEVICONS/react.puml
+
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!includeurl AzurePuml/Web/AzureAPIManagement.puml
+!includeurl AzurePuml/Web/AzureWebApp.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml
+!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
+!includeurl AzurePuml/Storage/AzureBlobStorage.puml
+!includeurl AzurePuml/Compute/AzureVirtualMachine.puml
+!includeurl AzurePuml/Security/AzureKeyVault.puml
+!includeurl AzurePuml/Networking/AzureCDNProfile.puml
+!includeurl AzurePuml/Analytics/AzureLogAnalyticsWorkspace.puml
+
+LAYOUT_LEFT_RIGHT
+
+'============================================================
+'DEFINICION
+'============================================================
+title **DIAGRAMA CLOUD-AZURE**
+
+Container(web_aplicacion, "Aplicación web autenticada", "react", "Diagnostico medico segun sintomas de un paciente", $sprite="react")
+
+AzureAPIManagement(apim_Gateway, "Api Gateway", "Api Management", "Endpoint de entrada para integraciones externas")
+
+System_Boundary(sys_backend,"Microservicios back end"){
+    
+
+    System_Boundary(sys_identity,"Microservicio de diagnostico medico"){
+        AzureWebApp(api_Microservicio, "Web API", "Net Core 6, C#", "Api REST")
+        
+    } 
+
+    System_Boundary(sys_experto,"Sistema experto"){
+        AzureLogAnalyticsWorkspace(log_Experto,"Traza de eventos","Analitica de errores")
+        AzureWebApp(api_motorInferencia, "Api(s) del motor de inferencia", "Flujos de procedimientos clinicos", "Api REST")  
+        AzureSqlDatabase(db_conocimiento, "Base de conocimiento", "SQL Server", "Almacenamiento de las reglas de solución de problemas, procedimientos y datos clinicos relevantes al dominio del problema")
+    }
+ 
+    
+}
+
+'============================================================
+'INTERACCIONES
+'============================================================
+
+Rel(web_aplicacion,apim_Gateway,"(Request) Sintomas del paciente","GET")
+Rel(apim_Gateway,web_aplicacion,"(Response) Diagnostico medico","JSON")
+
+Rel(apim_Gateway,api_Microservicio,"(Request) Sintomas del paciente","GET")
+Rel(api_Microservicio,apim_Gateway,"(Response) Diagnostico medico","JSON")
+
+
+api_motorInferencia--> db_conocimiento
+Rel(api_Microservicio,api_motorInferencia,"(Request) Sintomas del paciente","JSON")
+Rel(api_motorInferencia,api_Microservicio,"(Response) Diagnostico medico","JSON")
+
+@enduml

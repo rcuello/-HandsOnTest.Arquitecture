@@ -1,0 +1,92 @@
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'                   Symbols => https://github.com/plantuml-stdlib/Azure-PlantUML/blob/master/AzureSymbols.md#azure-symbols
+'============================================================
+
+@startuml diagrama-2-contenedor
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!includeurl AzurePuml/Web/AzureAPIManagement.puml
+!includeurl AzurePuml/Web/AzureWebApp.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml
+!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
+!includeurl AzurePuml/Storage/AzureBlobStorage.puml
+!includeurl AzurePuml/Compute/AzureVirtualMachine.puml
+!includeurl AzurePuml/Security/AzureKeyVault.puml
+!includeurl AzurePuml/Networking/AzureCDNProfile.puml
+!includeurl AzurePuml/Analytics/AzureLogAnalyticsWorkspace.puml
+!includeurl AzurePuml/Identity/AzureManagedIdentity.puml
+
+LAYOUT_LEFT_RIGHT
+
+'============================================================
+'DEFINICION
+'============================================================
+title **DIAGRAMA CLOUD-AZURE**
+Person(user_Enfermera, "Enfermera", "Ayudan a pacientes a traves del sistema de mesa de ayuda")
+Person(user_Experto, "Ingeniero del conocimiento", "Configura el conocimiento y razonamiento clinico al sistema experto")
+
+
+System_Boundary(azure, "Sistema de mesa de ayuda"){
+    
+    AzureManagedIdentity(identity,"Active Directory","Active Directory","Sistema de gestión de seguridad centralizado que tiene la compañía")
+    AzureAPIManagement(apim_Gateway, "Api Gateway", "Api Management", "Endpoint de entrada para integraciones externas")
+    
+    System_Boundary(sys_frontend,"Front end"){
+        AzureWebApp(web_Plataforma, "Portal Web", "React.js", "Sitio Web para la mesa de ayuda y configuracion del sistema experto")
+        AzureCDNProfile(cdn_Plataforma, "Standard", "Akamai", "Almacena en caché el contenido disponible para una latencia más baja y una entrega de contenido más rápida") 
+    }
+    System_Boundary(sys_backend,"Back end"){
+        AzureWebApp(api_Microservicios, "Api(s) Microservicios", "Net Core 6, C#", "Api REST")    
+        AzureVirtualMachine(vm_Cache, "VM Redis", "Linux", "Redis cache para sesion web y algunas variables globales al api")
+        AzureLogAnalyticsWorkspace(log_App,"Traza de eventos","Analitica de errores")
+        
+        System_Boundary(sys_almacenamiento,"Almacenamiento de datos"){
+            AzureSqlDatabase(db_init, "Aplicación", "SQL Server", "Contiene información de usuarios, accesos y configuración del sistema")
+            AzureSqlDatabase(db_medicalRecords, "Historias clinicas", "SQL Server", "Contiene información de pacientes y detalle de historias clinicas")
+            AzureBlobStorage(storage_anexoHistorias, "Storage", "StorageV2, Cool, GRS", "Almacena archivos (imagenes,documentos) relacionados a historia clinica del paciente") 
+        }
+        System_Boundary(sys_experto,"Sistema experto"){
+            AzureLogAnalyticsWorkspace(log_Experto,"Traza de eventos","Analitica de errores")
+            AzureWebApp(api_motorInferencia, "Api(s) del motor de inferencia", "Flujos de procedimientos clinicos", "Api REST")  
+            AzureSqlDatabase(db_conocimiento, "Base de conocimiento", "SQL Server", "Almacenamiento de las reglas de solución de problemas, procedimientos y datos clinicos relevantes al dominio del problema")
+        }
+    }
+}
+
+
+'============================================================
+'INTERACCIONES
+'============================================================
+note "Diagrama de contenedores: Descompone un sistema en contenedores interrelacionados. Un contenedor representa una aplicación o un almacén de datos" as N1
+'****** SISTEMA EXPERTO
+Rel(api_motorInferencia, db_conocimiento, "Consulta de reglas de inferencia", "C#")
+Rel(api_motorInferencia, log_Experto, "Traza de eventos y errores", "C#")
+
+Rel(user_Enfermera, web_Plataforma, "HTTPS", "Browser")
+Rel(user_Experto, web_Plataforma, "HTTPS", "Browser")
+Rel(apim_Gateway, api_Microservicios, "HTTPS", "REST")
+Rel(web_Plataforma, identity, "HTTPS", "Autenticacion y autorizacion")
+Rel(web_Plataforma, apim_Gateway, "HTTPS", "REST")
+Rel(web_Plataforma, cdn_Plataforma, "HTTPS", "GET")
+Rel(api_Microservicios, vm_Cache, "Cliente StackExchange.Redis", "C#")
+Rel(api_Microservicios, db_init, "Cliente Dapper", "C#")
+Rel(api_Microservicios, db_medicalRecords, "ADO.Net", "C#")
+
+Rel(db_medicalRecords, storage_anexoHistorias, "Ubicacion de archivos", "URL")
+Rel(api_Microservicios, log_App, "Traza de eventos y errores", "C#")
+
+
+Rel(api_Microservicios, api_motorInferencia, "HTTPS/REST", "Hechos(Problema clinico del paciente)")
+Rel(api_motorInferencia, api_Microservicios, "HTTPS/REST", "Conocimiento(Resultdo)")
+
+
+
+@enduml

@@ -1,0 +1,68 @@
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'                   Symbols => https://github.com/plantuml-stdlib/Azure-PlantUML/blob/master/AzureSymbols.md#azure-symbols
+' Objetos Devicon   => https://github.com/tupadr3/plantuml-icon-font-sprites
+'============================================================
+
+@startuml diagrama-3-componentes-autenticacion
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+
+!include DEVICONS/react.puml
+
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!includeurl AzurePuml/Web/AzureAPIManagement.puml
+!includeurl AzurePuml/Web/AzureWebApp.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml
+!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
+!includeurl AzurePuml/Storage/AzureBlobStorage.puml
+!includeurl AzurePuml/Compute/AzureVirtualMachine.puml
+!includeurl AzurePuml/Security/AzureKeyVault.puml
+!includeurl AzurePuml/Networking/AzureCDNProfile.puml
+!includeurl AzurePuml/Analytics/AzureLogAnalyticsWorkspace.puml
+
+LAYOUT_LEFT_RIGHT
+
+'============================================================
+'DEFINICION
+'============================================================
+title **DIAGRAMA CLOUD-AZURE**
+
+Container(web_aplicacion, "Aplicación web anonima", "react", "The main interface that the customer interacts with", $sprite="react")
+
+AzureAPIManagement(apim_Gateway, "Api Gateway", "Api Management", "Endpoint de entrada para integraciones externas")
+
+System_Boundary(sys_backend,"Microservicios back end"){
+    AzureSqlDatabase(db_init, "Aplicación", "SQL Server", "Contiene información de usuarios y permisos")      
+
+    System_Boundary(sys_identity,"Microservicio de autenticación y autorización"){
+        AzureWebApp(api_Identity, "Seguridad", "Net Core 6, C#", "Api REST")
+        
+    } 
+
+    System_Boundary(sys_identity,"Microservicio de autenticación y autorización"){
+        AzureWebApp(api_Identity, "Login", "Net Core 6, C#", "Api REST")
+        
+    }   
+    
+}
+
+'============================================================
+'INTERACCIONES
+'============================================================
+
+api_Identity--> db_init
+Rel(web_aplicacion,apim_Gateway,"Autenticación","HTTPS")
+Rel(apim_Gateway,web_aplicacion,"Token de seguridad","JWT")
+
+Rel(apim_Gateway,api_Identity,"Autenticación","HTTPS")
+Rel(api_Identity,apim_Gateway,"Token de seguridad","JWT")
+
+@enduml

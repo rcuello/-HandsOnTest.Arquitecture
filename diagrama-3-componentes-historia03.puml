@@ -1,0 +1,71 @@
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'                   Symbols => https://github.com/plantuml-stdlib/Azure-PlantUML/blob/master/AzureSymbols.md#azure-symbols
+' Objetos Devicon   => https://github.com/tupadr3/plantuml-icon-font-sprites
+'============================================================
+
+@startuml diagrama-3-componentes-historia03
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+
+!include DEVICONS/react.puml
+
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!includeurl AzurePuml/Web/AzureAPIManagement.puml
+!includeurl AzurePuml/Web/AzureWebApp.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml
+!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
+!includeurl AzurePuml/Storage/AzureBlobStorage.puml
+!includeurl AzurePuml/Compute/AzureVirtualMachine.puml
+!includeurl AzurePuml/Security/AzureKeyVault.puml
+!includeurl AzurePuml/Networking/AzureCDNProfile.puml
+!includeurl AzurePuml/Analytics/AzureLogAnalyticsWorkspace.puml
+
+LAYOUT_LEFT_RIGHT
+
+'============================================================
+'DEFINICION
+'============================================================
+title **DIAGRAMA CLOUD-AZURE**
+
+Container(web_aplicacion, "Aplicación web autenticada", "react", "Buscar centros medicos cercanos", $sprite="react")
+
+AzureAPIManagement(apim_Gateway, "Api Gateway", "Api Management", "Endpoint de entrada para integraciones externas")
+
+System_Boundary(sys_backend,"Microservicios back end"){
+    
+
+    System_Boundary(sys_identity,"Microservicio de busqueda de centros medicos"){
+        AzureWebApp(api_Microservicio, "Web API", "Net Core 6, C#", "Api REST")
+        
+    } 
+
+    System_Boundary(sys_almacenamiento,"Almacenamiento de datos"){
+        AzureSqlDatabase(db_init, "Aplicación", "SQL Server", "Contiene información de usuarios, accesos y configuración del sistema")
+    }
+ 
+    
+}
+
+'============================================================
+'INTERACCIONES
+'============================================================
+
+Rel(web_aplicacion,apim_Gateway,"(Request) Buscar centros medicos cercanos","GET")
+Rel(apim_Gateway,web_aplicacion,"(Response) Centros medicos cercanos","JSON")
+
+Rel(apim_Gateway,api_Microservicio,"(Request) Buscar centros medicos cercanos","GET")
+Rel(api_Microservicio,apim_Gateway,"(Response) Centros medicos cercanos","JSON")
+
+
+api_Microservicio--> db_init
+
+
+@enduml

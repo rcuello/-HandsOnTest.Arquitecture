@@ -1,0 +1,45 @@
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'============================================================
+
+@startuml diagrama-1-contexto
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+
+'============================================================
+'DEFINICION
+'============================================================
+title **Contexto del negocio**
+
+Person_Ext(p_paciente, "Paciente", "Realizan inquietudes sobre potenciales problemas de salud", $tags="Cliente")
+
+Person(p_enfermera, "Enfermera", "Brinda asistencia medica remota de clientes (pacientes)",$tags="Usuario")
+
+System_Boundary(sys_helpDesk_boundary,"Sistema de mesa de ayuda"){
+    
+    Container(c_helpDesk, "Sistema de mesa de ayuda", "sistema software", "Permitir acceder información sobre pacientes,historias clinicas , diagnostico , tratamiento de posibles enfermedades y asistencia medica")
+    Container(c_ExpertSystem, "Sistema experto tratamiento medico", "sistema software", "Sistema que brinda apoyo para la toma de decisiones en forma de información diagnóstica precisa o, con menor frecuencia, sugiere un tratamiento o pronóstico",,$tags="Subsistema")
+    Container(c_MedicalCenter, "Sistema de centros medicos afiliados", "sistema software", "Sistema que brinda apoyo para la administracion de centros medicos afiliados",,$tags="Subsistema")
+    
+}
+
+System_Boundary(sys_callCenter,"Sistema Callcenter"){
+    System_Ext(web_callCenter, "Aws connect", "Sistema para recibir/realizar llamadas")
+    
+}
+
+
+'============================================================
+'INTERACCIONES
+'============================================================
+note "Diagrama de contexto: Muestra el alcance del sistema y su relación con los usuarios y otros sistemas" as N1
+Rel(p_paciente, web_callCenter, "Realizar consulta", "Via telefono")
+Rel(web_callCenter, p_enfermera, "Realizar consulta", "Via telefono")
+Rel(p_enfermera,c_helpDesk,"Consulta historial medico de pacientes para asistencia remota")
+Rel(c_helpDesk,c_ExpertSystem,"Consulta historial medico de pacientes para asistencia remota")
+Rel(c_helpDesk,c_MedicalCenter,"Consulta centros medicos cercanos para remisión de pacientes")
+@enduml

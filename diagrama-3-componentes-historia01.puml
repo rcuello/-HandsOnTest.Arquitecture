@@ -1,0 +1,64 @@
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'                   Symbols => https://github.com/plantuml-stdlib/Azure-PlantUML/blob/master/AzureSymbols.md#azure-symbols
+' Objetos Devicon   => https://github.com/tupadr3/plantuml-icon-font-sprites
+'============================================================
+
+@startuml diagrama-3-componentes-historia01
+
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+
+!define AzurePuml https://raw.githubusercontent.com/plantuml-stdlib/Azure-PlantUML/master/dist
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+
+!include DEVICONS/react.puml
+
+!includeurl AzurePuml/AzureCommon.puml
+!includeurl AzurePuml/AzureC4Integration.puml
+!includeurl AzurePuml/Web/AzureAPIManagement.puml
+!includeurl AzurePuml/Web/AzureWebApp.puml
+!includeurl AzurePuml/Compute/AzureFunction.puml
+!includeurl AzurePuml/Databases/AzureSqlDatabase.puml
+!includeurl AzurePuml/Storage/AzureBlobStorage.puml
+!includeurl AzurePuml/Compute/AzureVirtualMachine.puml
+!includeurl AzurePuml/Security/AzureKeyVault.puml
+!includeurl AzurePuml/Networking/AzureCDNProfile.puml
+!includeurl AzurePuml/Analytics/AzureLogAnalyticsWorkspace.puml
+
+LAYOUT_LEFT_RIGHT
+
+'============================================================
+'DEFINICION
+'============================================================
+title **DIAGRAMA CLOUD-AZURE**
+
+Container(web_aplicacion, "Aplicación web autenticada", "react", "Consulta de historias clinicas de un paciente", $sprite="react")
+
+AzureAPIManagement(apim_Gateway, "Api Gateway", "Api Management", "Endpoint de entrada para integraciones externas")
+
+System_Boundary(sys_backend,"Microservicios back end"){
+    AzureSqlDatabase(db_medicalRecords, "Historias clinicas", "SQL Server", "Contiene información de pacientes y detalle de historias clinicas")
+
+    System_Boundary(sys_identity,"Microservicio de historias clinicas"){
+        AzureWebApp(api_Identity, "Web API", "Net Core 6, C#", "Api REST")
+        
+    } 
+ 
+    
+}
+
+'============================================================
+'INTERACCIONES
+'============================================================
+
+api_Identity--> db_medicalRecords
+Rel(web_aplicacion,apim_Gateway,"(Request) Historia clinica","GET")
+Rel(apim_Gateway,web_aplicacion,"(Response) Historia clinica","JSON")
+
+Rel(apim_Gateway,api_Identity,"(Request) Historia clinica","GET")
+Rel(api_Identity,apim_Gateway,"(Response) Historia clinica","JSON")
+
+@enduml

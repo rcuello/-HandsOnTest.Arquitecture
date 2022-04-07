@@ -1,0 +1,58 @@
+@startuml diagrama-4-codigo
+'============================================================
+'Wiki ayuda
+' Objetos C4 Model  => https://github.com/plantuml-stdlib/C4-PlantUML
+' Objetos Azure     => https://github.com/plantuml-stdlib/Azure-PlantUML
+'============================================================
+
+
+!includeurl https://raw.githubusercontent.com/robbell/plantuml-c4/master/c4.puml
+
+
+
+Person("Enfermera", "Un empleado de soporte de llamadas.") as clinicEmployee
+
+Boundary("Microservicio", "Container"){
+    Component("AutenticacionController", "", "MVC Controller") as authController
+    Component("SistemaExpertoController", "", "MVC Controller") as systemExpertoController
+    Component("PacienteController", "", "MVC Controller") as pacienteController
+    Component("HistoriaClinicaController", "", "MVC Controller") as historiaClinicaController
+    Component("CentroMedicoController", "", "MVC Controller") as centroMedicoController
+
+    ' Inline colouring
+    Component("ApplicationService", "Se utiliza principalmente como fachada para que todos los controladores tengan un único punto de entrada", "Spring Service") as clinicService #095166
+
+    Component("AutenticacionRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as authRepository
+    Component("SistemaExpertoRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as sistemaExpertoRepository
+    Component("PacienteRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as pacienteRepository
+    Component("HistoriaClinicaRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as historiaClinicaRepository
+    Component("CentroMedicoRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as centroMedicoRepository
+}
+
+Database("Base de datos", "Almacena información sobre los pacientes y sus historias clinicas.", "Base de datos relacional") as database
+
+clinicEmployee ..> authController : Usa Tech("HTTPS")
+clinicEmployee ..> systemExpertoController : Usa Tech("HTTPS")
+clinicEmployee ..> pacienteController : Usa Tech("HTTPS")
+clinicEmployee ..> historiaClinicaController : Usa Tech("HTTPS")
+clinicEmployee ..> centroMedicoController : Usa Tech("HTTPS")
+
+authController ..> clinicService
+systemExpertoController ..> clinicService
+pacienteController ..> clinicService
+historiaClinicaController ..> clinicService
+centroMedicoController ..> clinicService
+
+clinicService ..> authRepository
+clinicService ..> sistemaExpertoRepository
+clinicService ..> pacienteRepository
+clinicService ..> historiaClinicaRepository
+clinicService ..> centroMedicoRepository
+
+authRepository ..> database : Escritura y lectura con ("Dapper")
+sistemaExpertoRepository ..> database : Escritura y lectura con ("Dapper")
+pacienteRepository ..> database : Escritura y lectura con ("Dapper")
+historiaClinicaRepository ..> database : Escritura y lectura con ("Dapper")
+centroMedicoRepository ..> database : Escritura y lectura con ("Dapper")
+
+@enduml
