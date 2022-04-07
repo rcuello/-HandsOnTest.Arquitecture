@@ -23,6 +23,8 @@ Las siguientes son las funcionalidades a implementar en la aplicación.
 ## Modelado C4 de la arquitectura
 El modelado C4 define la arquitectura de software en diferentes niveles de detalle. Un modelo C4 es un conjunto de diagramas que representan el contexto, los contenedores, los componentes y el código de una pieza de software.
 
+Para la elaboración de los diagramas UML se utilizó la herramienta [PlantUML](https://plantuml.com/es/) de codigo abierto. Los diagramas son definidos usando un lenguaje programable sencillo e intuitivo. [Guía de Referencia del Lenguaje PlantUML](https://plantuml.com/es/guide).
+
 ### Nivel 1: Diagramas de contexto
 Los diagramas de contexto son la descripción más general de lo que hace su sistema, quién lo usará y con qué otros sistemas interactuará. Un diagrama de contexto ayuda a describir el alcance e identificar usuarios y qué problema se va a resolver.
 
@@ -72,8 +74,6 @@ El último nivel requiere muchos detalles para mostrar cómo se implementa realm
 
 [Codigo fuente plantUml](diagrama-4-codigo-domaindrivendesign.puml)
 
-## Herramienta de Modelado C4
-[PlantUML](https://plantuml.com/es/) es una herramienta de codigo abierto para realizar diagramas UML. Los diagramas son definidos usando un lenguaje programable sencillo e intuitivo. [Guía de Referencia del Lenguaje PlantUML](https://plantuml.com/es/guide).
 
 # Prerequisitos
 - [.NET SDK](https://dotnet.microsoft.com/download/dotnet/6.0): 6.0.100-preview.5.21271.2
