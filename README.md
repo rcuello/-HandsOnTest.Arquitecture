@@ -39,16 +39,16 @@ Un paso más profundo que el diagrama de contenedores, el diagrama de componente
 ### Autenticación y autorización
 ![](out/diagrama-3-componentes-autenticacion/diagrama-3-componentes-autenticacion.png)
 
-### Historia 1
+### Historia 1 Acceso historia clinica
 ![](out/diagrama-3-componentes-historia01/diagrama-3-componentes-historia01.png)
 
-### Historia 2
+### Historia 2 Asistencia medica
 ![](out/diagrama-3-componentes-historia02/diagrama-3-componentes-historia02.png)
 
-### Historia 3
+### Historia 3 Centros medicos
 ![](out/diagrama-3-componentes-historia03/diagrama-3-componentes-historia03.png)
 
-### Historia 4
+### Historia 4 Contactar centro medico
 ![](out/diagrama-3-componentes-historia04/diagrama-3-componentes-historia04.png)
 
 ### Nivel 4: Representación de código
