@@ -26,14 +26,35 @@ El modelado C4 define la arquitectura de software en diferentes niveles de detal
 ### Nivel 1: Diagramas de contexto
 Los diagramas de contexto son la descripción más general de lo que hace su sistema, quién lo usará y con qué otros sistemas interactuará. Un diagrama de contexto ayuda a describir el alcance e identificar usuarios y qué problema se va a resolver.
 
+![](out/diagrama-1-contexto/diagrama-1-contexto.png)
+
 ### Nivel 2: Diagramas de contenedores
 El diagrama de contenedor describe el sistema de software y muestra las API, las aplicaciones, las bases de datos y los microservicios que utilizará el sistema. Cada una de estas aplicaciones o servicios se representa con un contenedor y las interacciones entre ellos se muestran en un alto nivel.
+
+![](out/diagrama-2-contenedor/diagrama-2-contenedor.png)
 
 ### Nivel 3: Diagramas de componentes
 Un paso más profundo que el diagrama de contenedores, el diagrama de componentes detalla grupos de código dentro de un solo contenedor. Estos componentes representan abstracciones del código.
 
-### Nivel 4: Representación de código con diagramas de clase
-El último nivel requiere muchos detalles para mostrar cómo se implementa realmente el código de un solo componente. Para hacer esto, es necesario un diagrama de clase UML o un diagrama de relación de entidad que describa el componente.
+### Autenticación y autorización
+![](out/diagrama-3-componentes-autenticacion/diagrama-3-componentes-autenticacion.png)
+
+### Historia 1
+![](out/diagrama-3-componentes-historia01/diagrama-3-componentes-historia01.png)
+
+### Historia 2
+![](out/diagrama-3-componentes-historia02/diagrama-3-componentes-historia02.png)
+
+### Historia 3
+![](out/diagrama-3-componentes-historia03/diagrama-3-componentes-historia03.png)
+
+### Historia 4
+![](out/diagrama-3-componentes-historia04/diagrama-3-componentes-historia04.png)
+
+### Nivel 4: Representación de código
+El último nivel requiere muchos detalles para mostrar cómo se implementa realmente el código de un solo componente. Para hacer esto, es necesario un diagrama de clase UML, un diagrama de relación de entidad o de componentes que describa la interacción del sistema.
+
+![](out/diagrama-4-codigo-domaindrivendesign/diagrama-4-codigo.png)
 
 ## Herramienta de Modelado C4
 [PlantUML](https://plantuml.com/es/) es una herramienta de codigo abierto para realizar diagramas UML. Los diagramas son definidos usando un lenguaje programable sencillo e intuitivo. [Guía de Referencia del Lenguaje PlantUML](https://plantuml.com/es/guide).
