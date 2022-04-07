@@ -10,7 +10,7 @@
 
 
 
-Person("Enfermera", "Un empleado de soporte de llamadas.") as clinicEmployee
+Person("Enfermera", "Un empleado de soporte de llamadas.") as personEnfermera
 
 Boundary("Microservicio", "Container"){
     Component("AutenticacionController", "", "MVC Controller") as authController
@@ -20,7 +20,7 @@ Boundary("Microservicio", "Container"){
     Component("CentroMedicoController", "", "MVC Controller") as centroMedicoController
 
     ' Inline colouring
-    Component("ApplicationService", "Se utiliza principalmente como fachada para que todos los controladores tengan un único punto de entrada", "Spring Service") as clinicService #095166
+    Component("ApplicationService", "Se utiliza principalmente como fachada para que todos los controladores tengan un único punto de entrada", "AspNet Service") as clinicService #095166
 
     Component("AutenticacionRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as authRepository
     Component("SistemaExpertoRepository", "Clase de repositorio para objetos de dominio.", "AspNet MVC Controller") as sistemaExpertoRepository
@@ -31,11 +31,11 @@ Boundary("Microservicio", "Container"){
 
 Database("Base de datos", "Almacena información sobre los pacientes y sus historias clinicas.", "Base de datos relacional") as database
 
-clinicEmployee ..> authController : Usa Tech("HTTPS")
-clinicEmployee ..> systemExpertoController : Usa Tech("HTTPS")
-clinicEmployee ..> pacienteController : Usa Tech("HTTPS")
-clinicEmployee ..> historiaClinicaController : Usa Tech("HTTPS")
-clinicEmployee ..> centroMedicoController : Usa Tech("HTTPS")
+personEnfermera ..> authController : Usa Tech("HTTPS")
+personEnfermera ..> systemExpertoController : Usa Tech("HTTPS")
+personEnfermera ..> pacienteController : Usa Tech("HTTPS")
+personEnfermera ..> historiaClinicaController : Usa Tech("HTTPS")
+personEnfermera ..> centroMedicoController : Usa Tech("HTTPS")
 
 authController ..> clinicService
 systemExpertoController ..> clinicService
