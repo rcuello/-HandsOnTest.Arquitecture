@@ -19,7 +19,7 @@ Las siguientes son las funcionalidades a implementar en la aplicación.
 |03|COMO enfermera QUIERO conocer los centros médicos más cercanos a la ubicación del paciente PARA remitir al paciente al centro médico, en caso de requerirlo|
 |04|COMO enfermera QUIERO contactar al centro médico PARA informar de la llegada del paciente y poder brindarle una atención oportuna.|
 
-## Ciclo de vida de la aplicación
+## Etapas de la aplicación
 
 ![](out/ciclo-vida-software/Pruebas-ciclo-software.jpg)
 
@@ -40,6 +40,10 @@ Se hace para garantizar que el software cumple con las especificaciones original
 Se realiza una prueba del sistema implementado para encontrar posibles fallas en la implementación.
 8. **Mantenimiento**
 Se hace para todos los procedimientos correctivos (mantenimiento correctivo) y a las actualizaciones secundarias del software (mantenimiento continuo), junto con la actualización de las pruebas.
+
+## Planificación estandar de la aplicación por etapas
+![](out/ciclo-vida-software/planficacion-estandar.jpg)
+
 
 ## Modelado C4 de la arquitectura
 El modelado C4 define la arquitectura de software en diferentes niveles de detalle. Un modelo C4 es un conjunto de diagramas que representan el contexto, los contenedores, los componentes y el código de una pieza de software.
